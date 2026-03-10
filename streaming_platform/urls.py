@@ -21,7 +21,8 @@ urlpatterns = [
     path("channel/<str:username>/videos/", views.user_profile_videos, name="user_profile_videos"),
     path("channel/<str:username>/playlists/",views.user_profile_playlists, name="user_profile_playlists"),
     path("channel/<str:username>/posts/", views.user_profile_posts, name='user_profile_posts'),
-
+    path("channel-edit/", views.channel_edit, name="edit_channel"),
+    
     path("subscribe/<int:user_id>/", views.toggle_subscribe, name="toggle_subscribe"),
     path("video/<int:video_id>/like/", views.toggle_like, name="toggle_like"),
     path("subscriptions/", views.subscription_feed, name="subscription_feed"),

@@ -107,7 +107,6 @@
     border-radius: 6px;
     cursor: pointer;
     margin-right: 12px;
-    font-family: Roboto, Arial, sans-serif;
     font-size: 13px;
 }
 
@@ -253,7 +252,7 @@
     <!-- ✅ Header with close button -->
     <div class="upload-header">
         <h2>Upload Video</h2>
-        <a href="{% url 'home' %}" class="close-btn" title="Cancel">✕</a>
+        <a href="{{ request.META.HTTP_REFERER }}" class="close-btn" title="Cancel">✕</a>
     </div>
 
     <form method="post" enctype="multipart/form-data" id="uploadForm">
@@ -307,7 +306,7 @@
 
         <!-- ✅ Cancel + Upload buttons -->
         <div class="upload-actions">
-            <a href="{% url 'home' %}" class="action-btn cancel-btn">Cancel</a>
+            <a href="{{ request.META.HTTP_REFERER }}" class="action-btn cancel-btn">Cancel</a>
             <button type="submit" class="action-btn upload-btn">Upload</button>
         </div>
 

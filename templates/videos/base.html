@@ -729,6 +729,8 @@
                         <div class="profile-divider"></div>
                         
                         <a href="{% url 'user_profile' user.username %}">📺 Your Channel</a>
+
+                        <a href="{% url 'edit_channel' %}">✏️ Edit Channel</a>
                         
                         <a href="{% url 'user_settings' %}">⚙️ Settings</a>
 
@@ -784,7 +786,6 @@
     <a href="#">⏱  History</a>
     <a href="#">👍  Liked videos</a>
     <a href="{% url 'user_profile' user.username %}">📺  Your channel</a>
-    <a href="{% url 'edit_channel' user.username %}">✏️ Edit Channel</a>
     <div class="sidebar-divider"></div>
 
     <a href="{% url 'user_settings' %}">⚙ Settings</a>

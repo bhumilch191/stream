@@ -1,0 +1,390 @@
+{% block content %}
+<style>
+        /* ===============================
+   YT STYLE CHANNEL BANNER
+================================ */
+
+.yt-banner-container{
+    width:100%;
+    overflow:hidden;
+    position:relative;
+}
+
+/* Wrapper keeps aspect ratio */
+.yt-banner-wrapper{
+    position:relative;
+    width:100%;
+    max-height:423px;
+}
+
+/* Banner Image */
+.yt-banner-image{
+    width:100%;
+    height:423px;
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+}
+
+/* Safe content zone */
+.yt-banner-safe{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+
+    width:1546px;
+    max-width:90%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+    .view-more-btn {
+        background: none;
+        border: none;
+        color: #3ea6ff;
+        cursor: pointer;
+        font-size: 13px;
+        padding: 0;
+        margin-top: 4px;
+    }
+
+    .subscribe {
+        background: #ff0000;
+        color: #fff;
+    }
+
+    .subscribe.subscribed {
+        background: #333;
+    }
+
+    .join {
+        background: transparent;
+        color: #3ea6ff;
+        border: 1px solid #3ea6ff;
+    }
+
+    .btn:hover {
+        transform: scale(1.05);
+    }
+
+    /* -------------------- HEADER -------------------- */
+    .channel-header {
+        position: relative;
+    }
+
+    .banner {
+        height: 260px;
+        background: linear-gradient(135deg, #1f1f1f, #333);
+        margin-bottom: 10px;
+    }
+
+    .channel-info {
+        display: flex;
+        margin: auto;
+        align-items: center;
+        gap: 20px;
+        padding: 0 40px;
+        margin-top: 0px;
+        background: #0f0f0f; 
+        border-bottom: 1px solid #222;
+    }
+
+    .profile-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid #0f0f0f;
+        background: #444;
+    }
+
+    .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+    .channel-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #cc0000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    .channel-text h1 {
+        font-size: 26px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .badge {
+        color: #3ea6ff;
+        font-size: 18px;
+    }
+
+    .channel-text p {
+        color: #aaa;
+        margin-top: 6px;
+    }
+
+    .channel-actions {
+        margin-left: auto;
+        display: flex;
+        gap: 12px;
+    }
+
+    .btn {
+        padding: 10px 18px;
+        border-radius: 20px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .channel-description {
+        margin-top: 6px;
+        max-width: 600px;
+    }
+
+    .desc {
+        color: #ccc;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    /* collapsed text */
+    .collapsed {
+        display: -webkit-box;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .channel-description.collapsed {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+
+    overflow: hidden;
+}
+
+/* ===============================
+   RESPONSIVE BEHAVIOR
+================================ */
+
+/* TV / large screens */
+@media (min-width:2560px){
+
+    .yt-banner-image{
+        height:1440px;
+    }
+
+}
+
+/* Desktop (YouTube crop) */
+@media (max-width:1920px){
+
+    .yt-banner-image{
+        height:423px;
+    }
+
+}
+
+/* Tablet */
+@media (max-width:1024px){
+
+    .yt-banner-image{
+        height:360px;
+    }
+
+}
+
+/* Mobile */
+@media (max-width:768px){
+
+    .yt-banner-image{
+        height:260px;
+    }
+
+}
+
+/* Small mobile */
+@media (max-width:480px){
+
+    .yt-banner-image{
+        height:200px;
+    }
+}
+
+    /* -------------------- RESPONSIVE -------------------- */
+    @media (max-width: 768px) {
+        .channel-info {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .channel-actions {
+            margin-left: 0;
+        }
+    }
+</style>
+<header class="channel-header">
+    {% if channel_user.channel.banner %}
+    <div class="yt-banner-container">
+
+        <div class="yt-banner-wrapper">
+
+            <div 
+                class="yt-banner-image"
+                style="background-image: url('{{ channel_user.channel.banner.url }}');">
+            </div>
+
+            <!-- Optional overlay content -->
+            <div class="yt-banner-safe">
+                <!-- logo / text if needed -->
+            </div>
+
+        </div>
+
+    </div>
+    {% endif %}
+    <div class="channel-info">
+        {% if channel_user.channel.avatar %}
+        <img src="{{ channel_user.channel.avatar }}" class="profile-pic">
+        {% else %}
+             <div class="channel-avatar"> {{ channel_user.username|first|upper }}</div>
+        {% endif %}
+        <div class="channel-text">
+            <h1>
+                {{ channel_user.first_name }} {{ channel_user.last_name }}
+                <span class="badge"></span>
+            </h1>
+            <p>{{ subscriber_count }} subscribers</p>
+            {% if channel_user.channel.description %}
+            <div class="channel-description">
+                <p id="channelDesc" class="desc" style="
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                ">
+                    {{ channel_user.channel.description }}
+                </p>
+                <button id="toggleDesc" class="view-more-btn">...more</button>
+            </div>
+            {% endif %}
+        </div>
+        {% if request.user != channel_user %}
+        <div class="channel-actions">
+            <button
+            id="subscribeBtn"
+            data-user-id="{{ channel_user.id }}"
+            class="btn subscribe">
+            {% if is_subscribed %}
+                Unsubscribe
+            {% else %}
+                Subscribe
+            {% endif %}
+            </button>
+            <button class="btn join">Join</button>
+        </div>
+        {% endif %}
+    </div>
+    <!-- Description Modal -->
+    <div id="descModal" style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.7);
+        z-index:9999;
+        align-items:center;
+        justify-content:center;
+    ">
+        <div style="
+            background:#212121;
+            border-radius:16px;
+            width:560px;
+            max-width:90vw;
+            max-height:80vh;
+            overflow-y:auto;
+            padding:28px 32px;
+            position:relative;
+        ">
+            <!-- Close button -->
+            <button onclick="closeDescModal()" style="
+                position:absolute;
+                top:16px; right:16px;
+                background:none;
+                border:none;
+                color:#aaa;
+                font-size:22px;
+                cursor:pointer;
+                line-height:1;
+            ">✕</button>
+
+            <!-- Channel name -->
+            <h2 style="margin:0 0 20px;font-size:20px;">
+                Description
+            </h2>
+
+            <!-- Description -->
+            <div style="font-size:14px;color:#ccc;line-height:1.7;white-space:pre-wrap;">
+                {{ channel_user.channel.description }}
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+/* SUBSCRIBE */
+document.getElementById("subscribeBtn")?.addEventListener("click", function () {
+    fetch("{% url 'toggle_subscribe' channel_user.id %}", {
+        method: "POST",
+        headers: { "X-CSRFToken": "{{ csrf_token }}" }
+    })
+    .then(res => res.json())
+    .then(data => {
+        this.innerText = data.subscribed ? "Unsubscribe" : "Subscribe";
+    });
+});
+
+/* DESCRIPTION MODAL */
+function openDescModal() {
+    const modal = document.getElementById("descModal");
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+}
+
+function closeDescModal() {
+    const modal = document.getElementById("descModal");
+    modal.style.display = "none";
+    document.body.style.overflow = "";
+}
+
+// Close on backdrop click
+document.getElementById("descModal").addEventListener("click", function(e) {
+    if (e.target === this) closeDescModal();
+});
+
+// Close on Escape key
+document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") closeDescModal();
+});
+
+// View more button opens modal
+const btn = document.getElementById("toggleDesc");
+if (btn) {
+    btn.onclick = openDescModal;
+}
+</script>
+{% endblock %}

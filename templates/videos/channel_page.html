@@ -4,6 +4,7 @@
 
 {% block title %}{% if channel_user.channel.name %}{{ channel_user.channel.name }}{% else %}{{ channel_user.username }}{% endif %}{% endblock %}
 {% block content %}
+{% include "videos/channel_header.html" %}
 {% csrf_token %}
 
 <style>
@@ -15,96 +16,7 @@
         color: inherit;
     }
 
-    /* -------------------- HEADER -------------------- */
-    .channel-header {
-        position: relative;
-    }
-
-    .banner {
-        height: 260px;
-        background: linear-gradient(135deg, #1f1f1f, #333);
-        margin-bottom: 10px;
-    }
-
-    .channel-info {
-        display: flex;
-        margin: auto;
-        align-items: center;
-        gap: 20px;
-        padding: 0 40px;
-        margin-top: 0px;
-        background: #0f0f0f; 
-        border-bottom: 1px solid #222;
-    }
-
-    .profile-img {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        border: 4px solid #0f0f0f;
-        background: #444;
-    }
-
-    .profile-pic {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-    .channel-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: #cc0000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-    }
-
-    .channel-text h1 {
-        font-size: 26px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .badge {
-        color: #3ea6ff;
-        font-size: 18px;
-    }
-
-    .channel-text p {
-        color: #aaa;
-        margin-top: 6px;
-    }
-
-    .channel-actions {
-        margin-left: auto;
-        display: flex;
-        gap: 12px;
-    }
-
-    .btn {
-        padding: 10px 18px;
-        border-radius: 20px;
-        border: none;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-    .channel-description {
-        margin-top: 6px;
-        max-width: 600px;
-    }
-
-    .desc {
-        color: #ccc;
-        font-size: 14px;
-        line-height: 1.5;
-    }
-
+   
     /* collapsed text */
     .collapsed {
         display: -webkit-box;
@@ -122,34 +34,6 @@
     overflow: hidden;
 }
 
-    .view-more-btn {
-        background: none;
-        border: none;
-        color: #3ea6ff;
-        cursor: pointer;
-        font-size: 13px;
-        padding: 0;
-        margin-top: 4px;
-    }
-
-    .subscribe {
-        background: #ff0000;
-        color: #fff;
-    }
-
-    .subscribe.subscribed {
-        background: #333;
-    }
-
-    .join {
-        background: transparent;
-        color: #3ea6ff;
-        border: 1px solid #3ea6ff;
-    }
-
-    .btn:hover {
-        transform: scale(1.05);
-    }
 
     /* -------------------- NAV TABS -------------------- */
     .nav-tabs {
@@ -309,54 +193,9 @@
             margin-left: 0;
         }
     }
+
 </style>
 
-<!-- ==================== HEADER ==================== -->
-<header class="channel-header">
-    {% if channel_user.channel.banner %}
-    <div class="banner">banner</div>
-    {% endif %}
-    <div class="channel-info">
-        {% if channel_user.channel.avatar %}
-        <img src="{{ channel_user.channel.avatar }}" class="profile-pic">
-        {% else %}
-             <div class="channel-avatar"> {{ channel_user.username|first|upper }}</div>
-        {% endif %}
-        <div class="channel-text">
-            <h1>
-                {{ channel_user.first_name }} {{ channel_user.last_name }}
-                <span class="badge"></span>
-            </h1>
-            <p>{{ subscriber_count }} subscribers</p>
-            {% if channel_user.profile.description %}
-            <div class="channel-description">
-                <p id="channelDesc" class="desc collapsed">
-                    {{ channel_user.profile.description }}
-                </p>
-
-                <button id="toggleDesc" class="view-more-btn">
-                    View more
-                </button>
-            </div>
-            {% endif %}
-        </div>
-        {% if request.user != channel_user %}
-        <div class="channel-actions">
-            <button
-            id="subscribeBtn"
-            data-user-id="{{ channel_user.id }}"
-            class="btn subscribe">
-            {% if is_subscribed %}
-                Unsubscribe
-            {% else %}
-                Subscribe
-            {% endif %}
-            </button>
-            <button class="btn join">Join</button>
-        </div>
-        {% endif %}
-    </div>
-</header>
 
 <!-- ==================== NAV ==================== -->
 <nav class="nav-tabs">
@@ -447,30 +286,7 @@
 {% endif %}
 <!-- ==================== JAVASCRIPT ==================== -->
 <script>
-/* SUBSCRIBE */
-document.getElementById("subscribeBtn")?.addEventListener("click", function () {
-    fetch("{% url 'toggle_subscribe' channel_user.id %}", {
-        method: "POST",
-        headers: { "X-CSRFToken": "{{ csrf_token }}" }
-    })
-    .then(res => res.json())
-    .then(data => {
-        this.innerText = data.subscribed ? "Subscribed" : "Subscribe";
-    });
-});
-/* CHANNEL DESCRIPTION */
-const desc = document.getElementById("channelDesc");
-const btn = document.getElementById("toggleDesc");
 
-if (btn) {
-    btn.onclick = () => {
-        desc.classList.toggle("collapsed");
-        btn.innerText =
-            desc.classList.contains("collapsed")
-            ? "View more"
-            : "Show less";
-    };
-}
 
 /* VIDEO DESCRIPTION */
 const videoDesc = document.getElementById("videoDesc");

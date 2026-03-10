@@ -1,6 +1,6 @@
 {% extends "videos/base.html" %}
 {% load static %}
-
+{% load custom_filters %}
 {% block title %}{{ video.title }}{% endblock %}
 
 {% block content %}
@@ -511,7 +511,7 @@ textarea {
 
         <!-- ✅ Description text — 3 lines then show more -->
         <div class="desc-text" id="descText">
-            {{ video.description }}
+            {{ video.description|linkify }}
         </div>
         {% if video.description|length > 150 %}
         <button class="desc-toggle" id="descToggle" onclick="toggleDesc()">

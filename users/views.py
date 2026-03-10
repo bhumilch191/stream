@@ -411,3 +411,42 @@ def user_settings(request):
         "name_form": name_form,
         "profile": profile
     })
+
+def channel_edit(request):
+    channel_user = request.user.channel
+
+
+    if request.method == "POST":
+        if request.POST.get("name"):
+            print("Channel name received:", request.POST["name"])
+            channel_user.name = request.POST["name"]
+            channel_user.save()
+
+        if request.POST.get("description"):
+            print("Description received:", request.POST["description"])
+            channel_user.description = request.POST.get("description")
+            channel_user.save()
+
+        ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"]
+        SIZE_LIMIT = 5 * 1024 * 1024  # 5MB
+
+        for field in ['banner', 'profile_picture']:
+            file = request.FILES.get(field)
+            if file:
+                if file.content_type not in ALLOWED_TYPES:
+                    messages.error(request, f"{field.replace('_', ' ').title()} must be a JPEG, PNG, GIF, or WEBP image.")
+                    return redirect("channel_edit")
+                if file.size > SIZE_LIMIT:
+                    messages.error(request, f"{field.replace('_', ' ').title()} must be less than 5MB.")
+                    return redirect("channel_edit")
+                else:
+                    if field=='banner':
+                        channel_user.banner = file
+                    else:
+                        channel_user.profile_picture = file
+                    channel_user.save()
+        
+    print("Inside channel edit view",channel_user)
+    return render(request,"videos/channel_edit.html",{
+        "channel_user":channel_user
+    })

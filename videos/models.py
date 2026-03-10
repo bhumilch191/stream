@@ -38,7 +38,7 @@ class Playlist(models.Model):
 
 class Video(models.Model):
     title = models.CharField(max_length=255)
-    description = models.TextField(max_length =255,blank=True)
+    description = models.TextField(max_length =5000,blank=True)
     video_file = models.FileField(upload_to="videos/",validators=[validate_video_file])
     thumbnail = models.ImageField(upload_to="thumbnails/", blank=True, null=True)
     playlists = models.ManyToManyField(Playlist, related_name="videos", blank=True )

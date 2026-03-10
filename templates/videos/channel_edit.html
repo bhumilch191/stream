@@ -1,0 +1,420 @@
+{% extends 'videos/base.html' %}
+{% block title %}Edit Channel{% endblock %}
+
+{% block content %}
+<style>
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+    .ce-wrapper {
+        min-height: 100vh;
+        background: #0a0a0a;
+        padding: 40px 20px 80px;
+    }
+
+    .ce-card {
+        max-width: 780px;
+        margin: 0 auto;
+        background: #111;
+        border: 1px solid #1e1e1e;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    }
+
+    /* ── Banner Preview ── */
+    .ce-banner-zone {
+        position: relative;
+        height: 180px;
+        background: linear-gradient(135deg, #1a1a1a, #222);
+        cursor: pointer;
+        overflow: hidden;
+        transition: filter 0.3s;
+    }
+
+    .ce-banner-zone:hover { filter: brightness(1.15); }
+
+    .ce-banner-zone img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+    }
+
+    .ce-banner-overlay {
+        position: absolute; inset: 0;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(0,0,0,0.45);
+        opacity: 0;
+        transition: opacity 0.25s;
+        font-size: 13px;
+        color: #fff;
+        letter-spacing: 0.08em;
+        gap: 8px;
+    }
+
+    .ce-banner-zone:hover .ce-banner-overlay { opacity: 1; }
+
+    /* ── Avatar row ── */
+    .ce-avatar-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 20px;
+        padding: 0 32px;
+        margin-top: -42px;
+        margin-bottom: 8px;
+    }
+
+    .ce-avatar-wrap {
+        position: relative;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .ce-avatar {
+        width: 84px; height: 84px;
+        border-radius: 50%;
+        border: 3px solid #111;
+        background: #cc0000;
+        object-fit: cover;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 30px; font-weight: 700; color: white;
+        overflow: hidden;
+    }
+
+    .ce-avatar-badge {
+        position: absolute;
+        bottom: 4px; right: 4px;
+        width: 24px; height: 24px;
+        border-radius: 50%;
+        background: #ff0000;
+        border: 2px solid #111;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 12px;
+        transition: transform 0.2s;
+    }
+
+    .ce-avatar-wrap:hover .ce-avatar-badge { transform: scale(1.2); }
+
+    .ce-avatar-hint {
+        font-size: 12px;
+        color: #555;
+        padding-bottom: 6px;
+    }
+
+    /* ── Form body ── */
+    .ce-form {
+        padding: 24px 32px 36px;
+    }
+
+    .ce-section-label {
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        color: #444;
+        text-transform: uppercase;
+        margin-bottom: 18px;
+        margin-top: 32px;
+        display: flex; align-items: center; gap: 10px;
+    }
+
+    .ce-section-label::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #1e1e1e;
+    }
+
+    .ce-section-label:first-child { margin-top: 0; }
+
+    .ce-field {
+        margin-bottom: 20px;
+    }
+
+    .ce-label {
+        display: block;
+        font-size: 12px;
+        color: #b1b1b1;
+        margin-bottom: 7px;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+    }
+
+    .ce-input,
+    .ce-textarea {
+        width: 100%;
+        background: #0d0d0d;
+        border: 1px solid #222;
+        border-radius: 10px;
+        color: #e8e8e8;
+        font-size: 14px;
+        padding: 11px 14px;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        resize: none;
+    }
+
+    .ce-input:focus,
+    .ce-textarea:focus {
+        border-color: #ff0000;
+        box-shadow: 0 0 0 3px rgba(255,0,0,0.08);
+    }
+
+    .ce-textarea { height: 100px; line-height: 1.6; }
+
+    .ce-char-count {
+        text-align: right;
+        font-size: 11px;
+        color: #444;
+        margin-top: 4px;
+    }
+
+    .ce-char-count.warn { color: #f59e0b; }
+    .ce-char-count.over { color: #ef4444; }
+
+    /* ── File input hidden ── */
+    .ce-file { display: none; }
+
+    /* ── Actions ── */
+    .ce-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 36px;
+        padding-top: 24px;
+        border-top: 1px solid #1a1a1a;
+    }
+
+    .ce-btn {
+        padding: 10px 24px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+    }
+
+    .ce-btn-cancel {
+        background: #1a1a1a;
+        color: #888;
+        border: 1px solid #222;
+    }
+
+    .ce-btn-cancel:hover { background: #222; color: #ccc; }
+
+    .ce-btn-save {
+        background: #ff0000;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .ce-btn-save:hover { background: #e00; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,0,0,0.3); }
+    .ce-btn-save:active { transform: translateY(0); }
+
+    /* ── Toast ── */
+    .ce-toast {
+        position: fixed;
+        bottom: 30px; right: 30px;
+        background: #1a1a1a;
+        border: 1px solid #2a2a2a;
+        color: white;
+        padding: 14px 20px;
+        border-radius: 12px;
+        font-size: 13px;
+        display: flex; align-items: center; gap: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        transform: translateY(80px);
+        opacity: 0;
+        transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+        z-index: 9999;
+    }
+
+    .ce-toast.show { transform: translateY(0); opacity: 1; }
+    .ce-toast-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+        .ce-form { padding: 20px 18px 30px; }
+        .ce-avatar-row { padding: 0 18px; }
+        .ce-actions { flex-direction: column; }
+        .ce-btn { width: 100%; text-align: center; }
+    }
+</style>
+
+<div class="ce-wrapper">
+<div class="ce-card">
+
+    <form method="POST" enctype="multipart/form-data" id="ceForm">
+        {% csrf_token %}
+
+        <!-- ── Banner ── -->
+        <div class="ce-banner-zone" onclick="document.getElementById('ceBannerFile').click()">
+            {% if channel_user.banner %}
+                <img id="ceBannerPreview" src="{{ channel_user.banner.url }}" alt="banner">
+            {% else %}
+                <img id="ceBannerPreview" src="" alt="banner" style="display:none;">
+            {% endif %}
+            <div class="ce-banner-overlay">
+                <span>📷</span> Change Banner
+            </div>
+        </div>
+        <input type="file" id="ceBannerFile" name="banner" class="ce-file" accept="image/*">
+
+        <!-- ── Avatar row ── -->
+        <div class="ce-avatar-row">
+            <div class="ce-avatar-wrap" onclick="document.getElementById('ceAvatarFile').click()">
+                <div class="ce-avatar" id="ceAvatarBox">
+                    {% if channel_user.avatar %}
+                        <img id="ceAvatarPreview" src="{{ channel_user.avatar }}" style="width:100%;height:100%;object-fit:cover;">
+                    {% else %}
+                        <span id="ceAvatarInitial">{{ channel_user.username|first|upper }}</span>
+                    {% endif %}
+                </div>
+                <div class="ce-avatar-badge">✎</div>
+            </div>
+            <p class="ce-avatar-hint">Click avatar to change photo</p>
+        </div>
+        <input type="file" id="ceAvatarFile" name="profile_picture" class="ce-file" accept="image/*">
+
+        <!-- ── Form fields ── -->
+        <div class="ce-form">
+
+            <div class="ce-section-label">Channel Info</div>
+
+            <div class="ce-field">
+                <label class="ce-label">Channel Name</label>
+                <input type="text" name="name" class="ce-input"
+                       value="{{ channel_user.name|default:request.user.username }}"
+                       placeholder="Your channel name" maxlength="100" id="ceNameInput">
+            </div>
+
+            <div class="ce-field">
+                <label class="ce-label">Description</label>
+                <textarea name="description" class="ce-textarea"
+                          placeholder="Tell viewers about your channel…"
+                          maxlength="2000" id="ceDescInput">{{ channel_user.description }}</textarea>
+                <div class="ce-char-count" id="ceDescCount">0 / 2000</div>
+            </div>
+
+            <div class="ce-section-label">Appearance</div>
+
+            <div class="ce-field">
+                <label class="ce-label">Banner Image</label>
+                <input type="text" class="ce-input" readonly
+                       id="ceBannerName" placeholder="No file chosen — click the banner above">
+            </div>
+
+            <div class="ce-field">
+                <label class="ce-label">Profile Picture</label>
+                <input type="text" class="ce-input" readonly
+                       id="ceAvatarName" placeholder="No file chosen — click the avatar above">
+            </div>
+
+            <!-- ── Actions ── -->
+            <div class="ce-actions">
+                <a href="{% url 'user_profile' request.user.username %}" class="ce-btn ce-btn-cancel">
+                    Cancel
+                </a>
+                <button type="submit" class="ce-btn ce-btn-save">
+                    Save Changes
+                </button>
+            </div>
+
+        </div>
+    </form>
+
+</div>
+</div>
+
+<!-- Toast -->
+<div class="ce-toast" id="ceToast">
+    <div class="ce-toast-dot"></div>
+    <span id="ceToastMsg">Changes saved!</span>
+</div>
+
+<script>
+
+function validateImage(file, fieldName) {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+
+    if (!allowedTypes.includes(file.type)) {
+        showToast(`❌ ${fieldName}: Only JPEG, PNG, WEBP or GIF allowed`, 'error');
+        return false;
+    }
+    if (file.size > maxSize) {
+        showToast(`❌ ${fieldName}: File must be under 5MB`, 'error');
+        return false;
+    }
+    return true;
+}
+
+function showToast(msg, type = 'success') {
+    const toast = document.getElementById('ceToast');
+    const dot = toast.querySelector('.ce-toast-dot');
+    document.getElementById('ceToastMsg').textContent = msg;
+    dot.style.background = type === 'error' ? '#ef4444' : '#22c55e';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// ── Banner preview ──
+document.getElementById('ceBannerFile').addEventListener('change', function() {
+    if (!this.files[0]) return;
+    if (!validateImage(this.files[0], 'Banner')) {
+    this.value = ''; // reset input
+    return;
+    }
+    document.getElementById('ceBannerName').value = this.files[0].name;
+    const reader = new FileReader();
+    reader.onload = e => {
+        const img = document.getElementById('ceBannerPreview');
+        img.src = e.target.result;
+        img.style.display = 'block';
+    };
+    reader.readAsDataURL(this.files[0]);
+});
+
+// ── Avatar preview ──
+document.getElementById('ceAvatarFile').addEventListener('change', function() {
+    if (!this.files[0]) return;
+    if (!validateImage(this.files[0], 'Profile Picture')) {
+    this.value = ''; // reset input
+    return;
+    }
+    document.getElementById('ceAvatarName').value = this.files[0].name;
+    const reader = new FileReader();
+    reader.onload = e => {
+        const box = document.getElementById('ceAvatarBox');
+        box.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    };
+    reader.readAsDataURL(this.files[0]);
+});
+
+// ── Char counter ──
+const descInput = document.getElementById('ceDescInput');
+const descCount = document.getElementById('ceDescCount');
+
+function updateCount() {
+    const len = descInput.value.length;
+    const max = 2000;
+    descCount.textContent = `${len} / ${max}`;
+    descCount.className = 'ce-char-count' + (len > max ? ' over' : len > max * 0.85 ? ' warn' : '');
+}
+descInput.addEventListener('input', updateCount);
+updateCount();
+
+// ── Toast on submit ──
+document.getElementById('ceForm').addEventListener('submit', function() {
+    showToast('Saving changes…');
+});
+
+// ── Show toast on load if Django messages present ──
+{% if messages %}
+window.addEventListener('DOMContentLoaded', () => {
+    showToast('{% for m in messages %}{{ m }}{% endfor %}');
+});
+{% endif %}
+</script>
+
+{% endblock %}

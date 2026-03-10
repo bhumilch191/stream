@@ -66,3 +66,22 @@ class UserSubscription(models.Model):
 
     def is_active(self):
         return self.active and self.end_date > timezone.now()
+        
+class SocialLink(models.Model):
+    PLATFORM_CHOICES = [
+        ('website',   '🌐 Website'),
+        ('instagram', '📸 Instagram'),
+        ('twitter',   '🐦 Twitter / X'),
+        ('youtube',   '▶️ YouTube'),
+        ('facebook',  '📘 Facebook'),
+        ('tiktok',    '🎵 TikTok'),
+        ('linkedin',  '💼 LinkedIn'),
+        ('github',    '🐙 GitHub'),
+    ]
+
+    channel  = models.ForeignKey(Channel, on_delete=models.CASCADE, related_name='social_links')
+    platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES)
+    url      = models.URLField()
+
+    def __str__(self):
+        return f"{self.channel} - {self.platform}"

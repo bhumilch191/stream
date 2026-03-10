@@ -1,4 +1,5 @@
 {% block content %}
+{% load custom_filters %}
 <style>
         /* ===============================
    YT STYLE CHANNEL BANNER
@@ -278,7 +279,7 @@
                     -webkit-box-orient: vertical;
                     overflow: hidden;
                 ">
-                    {{ channel_user.channel.description }}
+                    {{ channel_user.channel.description|linkify }}
                 </p>
                 <button id="toggleDesc" class="view-more-btn">...more</button>
             </div>
@@ -339,7 +340,7 @@
 
             <!-- Description -->
             <div style="font-size:14px;color:#ccc;line-height:1.7;white-space:pre-wrap;">
-                {{ channel_user.channel.description }}
+                {{ channel_user.channel.description|linkify }}
             </div>
         </div>
     </div>

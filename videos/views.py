@@ -604,7 +604,8 @@ def add_comment(request, video_id):
         return JsonResponse({
             "username":comment.user.username,
             "text":comment.text,
-            "time":comment.created_at.isoformat(),
+            "avatar": request.user.channel.avatar or None,
+            "created_at":comment.created_at.isoformat(),
             "total_comments": comment.video.comments.count()
         })
 

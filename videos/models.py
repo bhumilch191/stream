@@ -139,11 +139,22 @@ class Comment(models.Model):
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
+    likes = models.PositiveBigIntegerField(null=True)
+    dislikes = models.PositiveBigIntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username}: {self.text[:20]}"
     
+class CommentReply(models.Model):
+    comment = models.ForeignKey(Comment,on_delete=models.CASCADE,related_name="comment_reply")
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    text = models.TextField()
+    likes = models.PositiveBigIntegerField(null=True)
+    dislikes = models.PositiveBigIntegerField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 class VideoLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name="likes")

@@ -190,115 +190,225 @@ a {
 }
 
 /* ===== COMMENTS ===== */
-.comments-wrapper {
+.yt-comments-wrapper {
     margin-top: 24px;
-    border-top: 1px solid #303030;
     padding-top: 16px;
 }
 
 /* ===== HEADER ===== */
-.comments-header {
+.yt-comments-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    cursor: pointer;
+    gap: 24px;
+    margin-bottom: 24px;
 }
 
-.comments-header h3 {
-    margin: 0;
+.yt-comments-count {
     font-size: 18px;
+    font-weight: 600;
+    margin: 0;
 }
 
-.comments-header span {
-    font-size: 14px;
-    color: #aaa;
-}
-
-/* ===== CONTAINER (COLLAPSIBLE) ===== */
-.comments-container {
-    height: 420px;
+.yt-sort-btn {
     display: flex;
-    flex-direction: column;
-    border-radius: 8px;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 20px;
+    transition: background 0.2s;
+}
+
+.yt-sort-btn:hover { background: #272727; }
+
+/* ===== ADD COMMENT ROW ===== */
+.yt-add-comment-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 32px;
+}
+
+.yt-user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #cc0000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
     overflow: hidden;
-    margin: 0;
-    margin-top: 12px;
-    font-size: 18px;
-    max-height: 0;
-    transition: max-height 0.35s ease;
+    object-fit: cover;
 }
 
-/* When expanded */
-.comments-container.open {
-    max-height: 420px; /* Adjust as needed */
-}
-
-/* ===== SCROLLABLE COMMENTS LIST ===== */
-.comments-list {
-    overflow-y: auto;
-    padding-right: 6px;
+.yt-comment-input-wrap {
     flex: 1;
 }
 
-/* Scroll styling */
-.comments-list::-webkit-scrollbar {
-    width: 6px;
+.yt-comment-input-wrap textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #303030;
+    color: white;
+    font-size: 14px;
+    padding: 6px 0;
+    resize: none;
+    height: 36px;
+    outline: none;
+    transition: border-color 0.2s, height 0.2s;
+    overflow: hidden;
 }
-.comments-list::-webkit-scrollbar-thumb {
+
+.yt-comment-input-wrap textarea:focus {
+    border-bottom-color: white;
+    height: 60px;
+}
+
+.yt-comment-actions {
+    display: none;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.yt-comment-input-wrap textarea:focus ~ .yt-comment-actions,
+.yt-comment-actions.visible {
+    display: flex;
+}
+
+.yt-cancel-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 14px;
+    border-radius: 20px;
+    transition: background 0.2s;
+}
+
+.yt-cancel-btn:hover { background: #272727; }
+
+.yt-post-btn {
+    background: #3ea6ff;
+    border: none;
+    color: #0f0f0f;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: background 0.2s;
+}
+
+.yt-post-btn:hover { background: #5bb8ff; }
+.yt-post-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ===== COMMENT ITEM ===== */
+.yt-comment-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.yt-comment-body {
+    flex: 1;
+}
+
+.yt-comment-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.yt-comment-username {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+}
+
+.yt-comment-time {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.yt-comment-text {
+    font-size: 14px;
+    color: #f1f1f1;
+    line-height: 1.6;
+    margin: 0 0 8px;
+}
+
+.yt-comment-footer {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.yt-icon-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    padding: 6px 10px;
+    border-radius: 20px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.yt-icon-btn:hover {
+    background: #272727;
+    color: white;
+}
+
+.yt-icon-btn.liked { color: #3ea6ff; }
+.yt-icon-btn.disliked { color: #ff4d4d; }
+
+.yt-reply-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: background 0.2s;
+    margin-left: 4px;
+}
+
+.yt-reply-btn:hover { background: #272727; }
+
+/* ===== NO COMMENTS ===== */
+.yt-no-comments {
+    color: #aaa;
+    font-size: 14px;
+    text-align: center;
+    padding: 40px 0;
+}
+
+/* ===== SCROLLBAR ===== */
+.yt-comments-list::-webkit-scrollbar { width: 6px; }
+.yt-comments-list::-webkit-scrollbar-thumb {
     background: #333;
     border-radius: 8px;
-}
-
-/* ===== INDIVIDUAL COMMENT ===== */
-.comment {
-    margin-bottom: 14px;
-}
-
-.comment small {
-    color: #aaa;
-    font-size: 12px;
-}
-
-.comment p {
-    margin: 4px 0;
-    color: #ccc;
-}
-
-/* ===== COMMENT FORM (STICKY BOTTOM) ===== */
-.comment-form {
-    flex-shrink: 0;
-    border-top: 1px solid #303030;
-    padding: 12px;
-    background: #0f0f0f;
-}
-
-.comment-form textarea {
-    width: 100%;
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 8px;
-    color: white;
-    resize: none;
-    height: 70px;
-    margin-bottom: 8px;
-}
-
-.comment-btn {
-    background: #ff0000;
-    color: white;
-    border: none;
-    padding: 6px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-}
-
-.comment-btn:hover {
-    background: #cc0000;
-}
-
-.no-comments {
-    color: #aaa;
 }
 
 textarea {
@@ -520,50 +630,138 @@ textarea {
         {% endif %}
     </div>
 
-    <!-- COMMENTS -->
-   <div class="comments-wrapper">
-       
-        <!-- Header (Always Visible) -->
-        <div class="comments-header" onclick="toggleComments()">
-            <h3>
-                Comments ({{ video.comments.count }})
-            </h3>
-            <span id="commentToggleIcon">▼</span>
-        </div>
+   <!-- ===== COMMENTS ===== -->
+<div class="yt-comments-wrapper">
 
+    <!-- Header -->
+    <div class="yt-comments-header">
+        <h3 class="yt-comments-count" id="ytCommentCount">
+            {{ video.comments.count }} Comments
+        </h3>
+        <button class="yt-sort-btn">
+            ≡ Sort by
+        </button>
+    </div>
 
-         <!-- Collapsible Body -->
-         <div id="commentsContainer" class="comments-container">
-             
-             <!-- Scrollable Comments List -->
-             <div class="comments-list">
-                {% for comment in video.comments.all %}
-                <div class="comment">
-                    <strong>{{ comment.user.username }}</strong>
-                        <small class="comment-time"
-                        data-time="{{ comment.created_at|date:'c' }}">
-                        · {{ comment.created_at|timesince }} ago
-                    </small>
-                        <p>{{ comment.text }}</p>
-                    </div>
-                    {% empty %}
-                    <p class="no-comments">No comments yet.</p>
-                    {% endfor %}
+    <!-- Add Comment -->
+    {% if user.is_authenticated %}
+    <div class="yt-add-comment-row">
+
+        <!-- User avatar -->
+        {% if user.channel.avatar %}
+            <img src="{{ user.channel.avatar }}" class="yt-user-avatar">
+        {% else %}
+            <div class="yt-user-avatar">{{ user.username|first|upper }}</div>
+        {% endif %}
+
+        <div class="yt-comment-input-wrap">
+            <form id="commentForm">
+                {% csrf_token %}
+                <textarea
+                    id="commentInput"
+                    name="comment"
+                    placeholder="Add a comment..."
+                    required
+                ></textarea>
+                <div class="yt-comment-actions" id="commentActions">
+                    <button type="button" class="yt-cancel-btn" id="cancelComment">Cancel</button>
+                    <button type="submit" class="yt-post-btn" id="postBtn" disabled>Comment</button>
                 </div>
-                
-                <!-- Fixed Post Comment Box -->
-                {% if user.is_authenticated %}
-                <div class="comment-form">
-                    <form id="commentForm">
-                    {% csrf_token %}
-                    <textarea id="commentInput" name="comment" placeholder="Add a comment..." required></textarea>
-                    <button type="submit" class="comment-btn">Post Comment</button>
-                    </form>
-                </div>
-            {% endif %}
-            
+            </form>
         </div>
     </div>
+    {% endif %}
+
+    <hr style="border:none;border-top:1px solid #303030;margin-bottom:24px;">
+
+    <!-- Comments List -->
+    <div class="yt-comments-list" id="ytCommentsList">
+        {% for comment in video.comments.all %}
+        <div class="yt-comment-item">
+
+            <!-- Avatar -->
+            {% if comment.user.channel.avatar %}
+                <img src="{{ comment.user.channel.avatar }}" class="yt-user-avatar">
+            {% else %}
+                <div class="yt-user-avatar">{{ comment.user.username|first|upper }}</div>
+            {% endif %}
+
+            <!-- Body -->
+            <div class="yt-comment-body">
+                <div class="yt-comment-meta">
+                    <span class="yt-comment-username">@{{ comment.user.username }}</span>
+                    <span class="yt-comment-time comment-time" data-time="{{ comment.created_at|date:'c' }}">
+                        {{ comment.created_at|timesince }} ago
+                    </span>
+                </div>
+                <p class="yt-comment-text">{{ comment.text }}</p>
+                <div class="yt-comment-footer">
+                    <button class="yt-icon-btn like-comment-btn" data-comment-id="{{ comment.id }}">
+                        👍 <span class="like-count">{{ comment.likes.count }}</span>
+                    </button>
+                    <button class="yt-icon-btn dislike-comment-btn" data-comment-id="{{ comment.id }}">
+                        👎
+                    </button>
+                    <button class="yt-reply-btn" data-comment-id="{{ comment.id }}">Reply</button>
+                   
+                </div>
+
+                <!-- Reply form -->
+                <div class="yt-reply-form" id="replyForm-{{ comment.id }}" style="display:none;margin-top:12px;">
+                    <div style="display:flex;gap:10px;align-items:flex-start;">
+                        {% if user.channel.avatar %}
+                            <img src="{{ user.channel.avatar }}" class="yt-user-avatar" style="width:32px;height:32px;object-fit:cover;">
+                        {% else %}
+                            <div class="yt-user-avatar" style="width:32px;height:32px;font-size:13px;">{{ user.username|first|upper }}</div>
+                        {% endif %}
+                        <div style="flex:1;">
+                            <textarea class="reply-input" placeholder="Add a reply..." style="width:100%;background:transparent;border:none;border-bottom:1px solid #303030;color:white;font-size:14px;padding:6px 0;resize:none;height:36px;outline:none;"></textarea>
+                            <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px;">
+                                <button class="yt-cancel-btn cancel-reply-btn" data-comment-id="{{ comment.id }}">Cancel</button>
+                                <button class="yt-post-btn submit-reply-btn" data-comment-id="{{ comment.id }}">Reply</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Existing replies -->
+            <div class="yt-replies-list" id="repliesList-{{ comment.id }}">
+                {% for reply in comment.replies.all %}
+                <div class="yt-comment-item" style="margin-top:12px;">
+                    {% if reply.user.channel.avatar %}
+                        <img src="{{ reply.user.channel.avatar }}" class="yt-user-avatar" style="width:32px;height:32px;object-fit:cover;">
+                    {% else %}
+                        <div class="yt-user-avatar" style="width:32px;height:32px;font-size:13px;">{{ reply.user.username|first|upper }}</div>
+                    {% endif %}
+                    <div class="yt-comment-body">
+                        <div class="yt-comment-meta">
+                            <span class="yt-comment-username">@{{ reply.user.username }}</span>
+                            <span class="yt-comment-time comment-time" data-time="{{ reply.created_at|date:'c' }}">
+                                {{ reply.created_at|timesince }} ago
+                            </span>
+                        </div>
+                        <p class="yt-comment-text">{{ reply.text }}</p>
+                        <div class="yt-comment-footer">
+                            <button class="yt-icon-btn like-comment-btn" data-comment-id="{{ reply.id }}">
+                                👍 <span class="like-count">{{ reply.likes.count }}</span>
+                            </button>
+                            <button class="yt-icon-btn dislike-comment-btn" data-comment-id="{{ reply.id }}">
+                                👎
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            </div>
+
+        </div>
+        {% empty %}
+        <p class="yt-no-comments">No comments yet. Be the first to comment!</p>
+        {% endfor %}
+    </div>
+
+</div>
     
 {% endif %}
 </div>
@@ -585,7 +783,10 @@ textarea {
                     
                     <div class="suggestion-info">
                         <h4>{{ v.title }}</h4>
-                    <p>{{ v.user.username }}</p>
+                        <a href="{% url 'user_profile' v.user.channel %}">
+                            <p>{{ v.user.channel.name }}</p>
+                        </a>
+                    
                     <span>{{ v.views }} views</span>
                 </div>
 
@@ -673,64 +874,33 @@ document.getElementById("likeBtn")?.addEventListener("click", function () {
     });
 });
 
-/* ✅ Comments toggle */
-function toggleComments() {
-    const container = document.getElementById("commentsContainer");
-    const icon = document.getElementById("commentToggleIcon");
+/* ===== COMMENT INPUT BEHAVIOR ===== */
+const commentInput = document.getElementById("commentInput");
+const commentActions = document.getElementById("commentActions");
+const cancelComment = document.getElementById("cancelComment");
+const postBtn = document.getElementById("postBtn");
 
-    container.classList.toggle("open");
+if (commentInput) {
+    commentInput.addEventListener("focus", () => {
+        commentActions.classList.add("visible");
+    });
 
-    const isOpen = container.classList.contains("open");
+    commentInput.addEventListener("input", () => {
+        postBtn.disabled = commentInput.value.trim() === "";
+    });
 
-    icon.textContent = isOpen ? "▲" : "▼";
-}
-function getRelativeTime(timestamp) {
-    const now = new Date();
-    const commentTime = new Date(timestamp);
-
-    const seconds = Math.floor((now - commentTime) / 1000);
-
-    if (seconds < 60) return "just now";
-
-    const minutes = Math.floor(seconds / 60);
-    if (minutes < 60)
-        return minutes === 1 ? "1 minute ago" : `${minutes} minutes ago`;
-
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24)
-        return hours === 1 ? "1 hour ago" : `${hours} hours ago`;
-
-    const days = Math.floor(hours / 24);
-    if (days < 30)
-        return days === 1 ? "1 day ago" : `${days} days ago`;
-
-    const months = Math.floor(days / 30);
-    if (months < 12)
-        return months === 1 ? "1 month ago" : `${months} months ago`;
-
-    const years = Math.floor(months / 12);
-    return years === 1 ? "1 year ago" : `${years} years ago`;
-}
-function updateAllCommentTimes() {
-    const timeElements = document.querySelectorAll(".comment-time");
-
-    timeElements.forEach(el => {
-        const timestamp = el.getAttribute("data-time");
-        el.textContent = " · " + getRelativeTime(timestamp);
+    cancelComment?.addEventListener("click", () => {
+        commentInput.value = "";
+        commentInput.blur();
+        commentActions.classList.remove("visible");
+        postBtn.disabled = true;
     });
 }
 
-// Run immediately
-updateAllCommentTimes();
-
-// Update every 60 seconds
-setInterval(updateAllCommentTimes, 60000);
+/* ===== SUBMIT COMMENT ===== */
 document.getElementById("commentForm")?.addEventListener("submit", function(e) {
-    e.preventDefault();   // 🚫 stop page refresh
-
-    const textarea = document.getElementById("commentInput");
-    const text = textarea.value.trim();
-
+    e.preventDefault();
+    const text = commentInput.value.trim();
     if (!text) return;
 
     fetch("{% url 'add_comment' video.id %}", {
@@ -739,42 +909,217 @@ document.getElementById("commentForm")?.addEventListener("submit", function(e) {
             "X-CSRFToken": "{{ csrf_token }}",
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: new URLSearchParams({
-            comment: text
-        })
+        body: new URLSearchParams({ comment: text })
     })
     .then(res => res.json())
     .then(data => {
+        // Build new comment element
+        const item = document.createElement("div");
+        item.classList.add("yt-comment-item");
+        item.dataset.commentId = data.comment_id;
+            item.innerHTML = `
+                ${avatarHtml}
+                <div class="yt-comment-body">
+                    <div class="yt-comment-meta">
+                        <span class="yt-comment-username">@${data.username}</span>
+                        <span class="yt-comment-time comment-time" data-time="${data.created_at}">just now</span>
+                    </div>
+                    <p class="yt-comment-text">${data.text}</p>
+                    <div class="yt-comment-footer">
+                        <button class="yt-icon-btn like-comment-btn" data-comment-id="${data.comment_id}">
+                            👍 <span class="like-count">0</span>
+                        </button>
+                        <button class="yt-icon-btn dislike-comment-btn" data-comment-id="${data.comment_id}">
+                            👎 <span class="dislike-count">0</span>
+                        </button>
+                        <button class="yt-reply-btn" data-comment-id="${data.comment_id}">Reply</button>
+                        <span class="yt-reply-count" style="font-size:13px;color:#3ea6ff;cursor:pointer;display:none;"></span>
+                    </div>
+                    <div class="yt-reply-form" id="replyForm-${data.comment_id}" style="display:none;margin-top:12px;">
+                        <div style="display:flex;gap:10px;align-items:flex-start;">
+                            ${avatarHtml}
+                            <div style="flex:1;">
+                                <textarea class="reply-input" placeholder="Add a reply..." style="width:100%;background:transparent;border:none;border-bottom:1px solid #303030;color:white;font-size:14px;padding:6px 0;resize:none;height:36px;outline:none;"></textarea>
+                                <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px;">
+                                    <button class="yt-cancel-btn cancel-reply-btn" data-comment-id="${data.comment_id}">Cancel</button>
+                                    <button class="yt-post-btn submit-reply-btn" data-comment-id="${data.comment_id}">Reply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="yt-replies-list" id="repliesList-${data.comment_id}"></div>
+                </div>
+            `;
 
-        // 🔹 Create new comment element
-        const commentDiv = document.createElement("div");
-        commentDiv.classList.add("comment");
+        // Remove "no comments" if present
+        const noComments = document.querySelector(".yt-no-comments");
+        if (noComments) noComments.remove();
 
-        commentDiv.innerHTML = `
-            <strong>${data.username}</strong>
-            <small class="comment-time" data-time="${data.created_at}">
-                · just now
-            </small>
-            <p>${data.text}</p>
-        `;
+        // Prepend to list
+        document.getElementById("ytCommentsList").prepend(item);
 
-        // 🔹 Append to top of comment list
-        const commentList = document.querySelector(".comments-list");
-        commentList.prepend(commentDiv);
+        // Update count
+        document.getElementById("ytCommentCount").textContent =
+            `${data.total_comments} Comments`;
 
-        // 🔹 Update comment count
-        document.querySelector(".comments-header h3")
-            .innerText = `Comments (${data.total_comments})`;
-
-        // 🔹 Clear textarea
-        textarea.value = "";
-
-        // 🔹 Auto-open comments if closed
-        document.getElementById("commentsContainer").classList.add("open");
-        document.getElementById("commentToggleIcon").textContent = "▲";
+        // Reset form
+        commentInput.value = "";
+        commentActions.classList.remove("visible");
+        postBtn.disabled = true;
     })
     .catch(err => console.error(err));
 });
+
+/* ===== LIKE / DISLIKE / REPLY ===== */
+function attachCommentListeners(container) {
+
+    // Like
+    container.querySelectorAll(".like-comment-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const commentId = this.dataset.commentId;
+            const countEl = this.querySelector(".like-count");
+            fetch(`{% url "toggle_like_comment" 0 %}`.replace('0', commentId), {
+                method: "POST",
+                headers: { "X-CSRFToken": "{{ csrf_token }}" }
+            })
+            .then(res => res.json())
+            .then(data => {
+                countEl.textContent = data.likes;
+                this.classList.toggle("liked", data.liked);
+                // reset dislike
+                const dislikeBtn = container.querySelector(`.dislike-comment-btn[data-comment-id="${commentId}"]`);
+                dislikeBtn?.classList.remove("disliked");
+            });
+        });
+    });
+
+    // Dislike
+    container.querySelectorAll(".dislike-comment-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const commentId = this.dataset.commentId;
+            fetch(`{% url 'dislike_comment' 0 %}`.replace('0', commentId), {
+                method: "POST",
+                headers: { "X-CSRFToken": "{{ csrf_token }}" }
+            })
+            .then(res => res.json())
+            .then(data => {
+                this.classList.toggle("disliked", data.disliked);
+                const likeBtn = container.querySelector(`.like-comment-btn[data-comment-id="${commentId}"]`);
+                likeBtn?.classList.remove("liked");
+                likeBtn.querySelector(".like-count").textContent = data.likes;
+            });
+        });
+    });
+
+    // Reply toggle
+    container.querySelectorAll(".yt-reply-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const commentId = this.dataset.commentId;
+            const replyForm = document.getElementById(`replyForm-${commentId}`);
+            if (replyForm) {
+                replyForm.style.display = replyForm.style.display === "none" ? "block" : "none";
+                replyForm.querySelector(".reply-input")?.focus();
+            }
+        });
+    });
+
+    // Cancel reply
+    container.querySelectorAll(".cancel-reply-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const commentId = this.dataset.commentId;
+            const replyForm = document.getElementById(`replyForm-${commentId}`);
+            if (replyForm) {
+                replyForm.style.display = "none";
+                replyForm.querySelector(".reply-input").value = "";
+            }
+        });
+    });
+
+    // Submit reply
+    container.querySelectorAll(".submit-reply-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const commentId = this.dataset.commentId;
+            const replyForm = document.getElementById(`replyForm-${commentId}`);
+            const text = replyForm.querySelector(".reply-input").value.trim();
+            if (!text) return;
+
+            fetch(`/comments/${commentId}/reply/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: new URLSearchParams({ text })
+            })
+            .then(res => res.json())
+            .then(data => {
+                const repliesList = document.getElementById(`repliesList-${commentId}`);
+                const replyEl = document.createElement("div");
+                replyEl.classList.add("yt-comment-item");
+                replyEl.style.marginTop = "12px";
+                replyEl.innerHTML = `
+                    <div class="yt-user-avatar" style="width:32px;height:32px;font-size:13px;">${data.username[0].toUpperCase()}</div>
+                    <div class="yt-comment-body">
+                        <div class="yt-comment-meta">
+                            <span class="yt-comment-username">@${data.username}</span>
+                            <span class="yt-comment-time">just now</span>
+                        </div>
+                        <p class="yt-comment-text">${data.text}</p>
+                    </div>
+                `;
+                repliesList.appendChild(replyEl);
+                replyForm.style.display = "none";
+                replyForm.querySelector(".reply-input").value = "";
+
+                // update reply count btn
+                const replyCountEl = replyForm.closest(".yt-comment-body").querySelector(".yt-reply-count");
+                if (replyCountEl) {
+                    replyCountEl.style.display = "inline";
+                    replyCountEl.textContent = `▲ ${data.total_replies} repl${data.total_replies > 1 ? 'ies' : 'y'}`;
+                }
+            });
+        });
+    });
+}
+
+document.querySelectorAll(".yt-comment-item").forEach(item => {
+    attachCommentListeners(item);
+});
+
+/* ===== COMMENT TIMESTAMPS ===== */
+function getRelativeTime(timestamp) {
+    const now = new Date();
+    const t = new Date(timestamp);
+    const seconds = Math.floor((now - t) / 1000);
+    if (seconds < 60) return "just now";
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    const days = Math.floor(hours / 24);
+    if (days < 30) return `${days} day${days > 1 ? 's' : ''} ago`;
+    const months = Math.floor(days / 30);
+    if (months < 12) return `${months} month${months > 1 ? 's' : ''} ago`;
+    const years = Math.floor(months / 12);
+    return `${years} year${years > 1 ? 's' : ''} ago`;
+}
+
+function updateAllCommentTimes() {
+    document.querySelectorAll(".comment-time").forEach(el => {
+        const t = el.getAttribute("data-time");
+        if (t) el.textContent = getRelativeTime(t);
+    });
+}
+
+updateAllCommentTimes();
+setInterval(updateAllCommentTimes, 60000);
+
+// Run immediately
+updateAllCommentTimes();
+
+// Update every 60 seconds
+setInterval(updateAllCommentTimes, 60000);
+
 </script>
 
 {% endblock %}

@@ -17,3 +17,5 @@ db.sqlite3
 
 *.jpg
 *.mp4
+test.py
+test.sh

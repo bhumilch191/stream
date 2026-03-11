@@ -10,7 +10,7 @@ from django.urls import reverse
 import stripe
 
 from .models import Subscription,SubscriptionPlan,UserSubscription,Channel
-from videos.models import Video,VideoLike, Playlist
+from videos.models import Video,VideoLike, Playlist, Comment
 from videos.forms import ProfilePhotoForm,NameChangeForm
 from datetime import timedelta
 from videos.models import Post
@@ -220,6 +220,64 @@ def toggle_like(request, video_id):
         "count": video.likes.count()
     })
 
+@require_POST
+@login_required
+def toggle_like_comment(request, comment_id):
+    comment = get_object_or_404(Comment,id=comment_id)
+    
+    if request.user in comment.likes.all():
+        comment.likes.remove(request.user)
+        liked=False
+    else:
+        comment.likes.add(request.user)
+        comment.dislikes.remove(request.user)
+        liked=True
+
+    return JsonResponse({
+        "liked":liked,
+        "likes": comment.likes.count()
+    })
+    
+@login_required
+def dislike_comment(request, comment_id):
+    comment = get_object_or_404(Comment,id=comment_id)
+
+    if request.user in comment.dislikes.all():
+        comment.dislikes.remove(request.user)
+        disliked = False
+    else:
+        comment.dislikes.add(request.user)
+        disliked=True
+        liked=False
+
+    return JsonResponse({
+        "disliked":disliked,
+        "likes":comment.likes.count()
+    })
+
+@login_required
+def reply_comment(request,comment_id):
+    parent = get_object_or_404(Comment,id=comment_id)
+
+    if request.method=="POST":
+        text = request.POST.get('text', '').strip()
+        if not text:
+            return JsonResponse({'error': 'Empty reply'}, status=400)
+        reply = Comment.objects.create(
+            video=parent.video,
+            user=request.user,
+            text=text,
+            parent=parent
+        )
+        return JsonResponse({
+            'username': reply.user.username,
+            'avatar': request.user.channel.avatar or None,
+            'text': reply.text,
+            'created_at': reply.created_at.isoformat(),
+            'total_replies': parent.replies.count(),
+        })
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
 @login_required
 def subscription_feed(request):
     videos = (
@@ -410,43 +468,4 @@ def user_settings(request):
         "photo_form": photo_form,
         "name_form": name_form,
         "profile": profile
-    })
-
-def channel_edit(request):
-    channel_user = request.user.channel
-
-
-    if request.method == "POST":
-        if request.POST.get("name"):
-            print("Channel name received:", request.POST["name"])
-            channel_user.name = request.POST["name"]
-            channel_user.save()
-
-        if request.POST.get("description"):
-            print("Description received:", request.POST["description"])
-            channel_user.description = request.POST.get("description")
-            channel_user.save()
-
-        ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"]
-        SIZE_LIMIT = 5 * 1024 * 1024  # 5MB
-
-        for field in ['banner', 'profile_picture']:
-            file = request.FILES.get(field)
-            if file:
-                if file.content_type not in ALLOWED_TYPES:
-                    messages.error(request, f"{field.replace('_', ' ').title()} must be a JPEG, PNG, GIF, or WEBP image.")
-                    return redirect("channel_edit")
-                if file.size > SIZE_LIMIT:
-                    messages.error(request, f"{field.replace('_', ' ').title()} must be less than 5MB.")
-                    return redirect("channel_edit")
-                else:
-                    if field=='banner':
-                        channel_user.banner = file
-                    else:
-                        channel_user.profile_picture = file
-                    channel_user.save()
-        
-    print("Inside channel edit view",channel_user)
-    return render(request,"videos/channel_edit.html",{
-        "channel_user":channel_user
     })

@@ -730,7 +730,6 @@
                         
                         <a href="{% url 'user_profile' user.username %}">📺 Your Channel</a>
 
-                        <a href="{% url 'edit_channel' %}">✏️ Edit Channel</a>
                         
                         <a href="{% url 'user_settings' %}">⚙️ Settings</a>
 
@@ -781,14 +780,16 @@
 <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
 <div id="sidebar" class="sidebar">
     <a href="/" class="sidebar-item active">🏠 Home</a>
+    {% if user.is_authenticated and user.username %}
     <a href="{% url 'subscription_feed' %}">🎬 Subscriptions</a>
     <a href="{% url 'playlist_list' %}">📚  Playlist</a>
     <a href="#">⏱  History</a>
     <a href="#">👍  Liked videos</a>
     <a href="{% url 'user_profile' user.username %}">📺  Your channel</a>
     <div class="sidebar-divider"></div>
-
+    
     <a href="{% url 'user_settings' %}">⚙ Settings</a>
+    {% endif %}
     <a href="#">❓ Help</a>
 
 </div>

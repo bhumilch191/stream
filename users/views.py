@@ -224,8 +224,59 @@ def toggle_like(request, video_id):
 @login_required
 def toggle_like_comment(request, comment_id):
     comment = get_object_or_404(Comment,id=comment_id)
-
     
+    if request.user in comment.likes.all():
+        comment.likes.remove(request.user)
+        liked=False
+    else:
+        comment.likes.add(request.user)
+        comment.dislikes.remove(request.user)
+        liked=True
+
+    return JsonResponse({
+        "liked":liked,
+        "likes": comment.likes.count()
+    })
+    
+@login_required
+def dislike_comment(request, comment_id):
+    comment = get_object_or_404(Comment,id=comment_id)
+
+    if request.user in comment.dislikes.all():
+        comment.dislikes.remove(request.user)
+        disliked = False
+    else:
+        comment.dislikes.add(request.user)
+        disliked=True
+        liked=False
+
+    return JsonResponse({
+        "disliked":disliked,
+        "likes":comment.likes.count()
+    })
+
+@login_required
+def reply_comment(request,comment_id):
+    parent = get_object_or_404(Comment,id=comment_id)
+
+    if request.method=="POST":
+        text = request.POST.get('text', '').strip()
+        if not text:
+            return JsonResponse({'error': 'Empty reply'}, status=400)
+        reply = Comment.objects.create(
+            video=parent.video,
+            user=request.user,
+            text=text,
+            parent=parent
+        )
+        return JsonResponse({
+            'username': reply.user.username,
+            'avatar': request.user.channel.avatar or None,
+            'text': reply.text,
+            'created_at': reply.created_at.isoformat(),
+            'total_replies': parent.replies.count(),
+        })
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 @login_required
 def subscription_feed(request):

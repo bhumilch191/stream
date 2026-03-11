@@ -446,6 +446,8 @@ def video_detail(request, video_id):
     sub_obj = Subscription.objects
     sub_counts = sub_obj.filter(channel=video.user).count()
     is_subscribed = sub_obj.filter(subscriber=request.user,channel=video.user).exists()
+
+    comments = video.comments.filter(parent=None).prefetch_related('replies', 'likes', 'dislikes')
     print("Subscription count for channel:", sub_counts)
     return render(request, "videos/video_detail.html", {
         "video": video,
@@ -454,6 +456,7 @@ def video_detail(request, video_id):
         "from_page": from_page,
         'user_playlists': user_playlists,
         "is_subscribed": is_subscribed,
+        "comments": comments
     })
 
 @require_POST
@@ -604,8 +607,7 @@ def add_comment(request, video_id):
         return JsonResponse({
             "username":comment.user.username,
             "text":comment.text,
-            "avatar": request.user.channel.avatar or None,
-            "created_at":comment.created_at.isoformat(),
+            "time":comment.created_at.isoformat(),
             "total_comments": comment.video.comments.count()
         })
 

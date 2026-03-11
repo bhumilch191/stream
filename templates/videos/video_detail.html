@@ -741,6 +741,14 @@ textarea {
                             </span>
                         </div>
                         <p class="yt-comment-text">{{ reply.text }}</p>
+                        <div class="yt-comment-footer">
+                            <button class="yt-icon-btn like-comment-btn" data-comment-id="{{ reply.id }}">
+                                👍 <span class="like-count">{{ reply.likes.count }}</span>
+                            </button>
+                            <button class="yt-icon-btn dislike-comment-btn" data-comment-id="{{ reply.id }}">
+                                👎
+                            </button>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
@@ -970,7 +978,7 @@ function attachCommentListeners(container) {
         btn.addEventListener("click", function() {
             const commentId = this.dataset.commentId;
             const countEl = this.querySelector(".like-count");
-            fetch(`/comments/${commentId}/like/`, {
+            fetch(`{% url "toggle_like_comment" 0 %}`.replace('0', commentId), {
                 method: "POST",
                 headers: { "X-CSRFToken": "{{ csrf_token }}" }
             })
@@ -989,7 +997,7 @@ function attachCommentListeners(container) {
     container.querySelectorAll(".dislike-comment-btn").forEach(btn => {
         btn.addEventListener("click", function() {
             const commentId = this.dataset.commentId;
-            fetch(`/comments/${commentId}/dislike/`, {
+            fetch(`{% url 'dislike_comment' 0 %}`.replace('0', commentId), {
                 method: "POST",
                 headers: { "X-CSRFToken": "{{ csrf_token }}" }
             })
